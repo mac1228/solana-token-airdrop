@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "name": "anchor test",
+      "request": "launch",
+      "command": "yarn run test",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
