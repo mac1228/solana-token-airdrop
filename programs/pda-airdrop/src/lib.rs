@@ -10,20 +10,11 @@ declare_id!("AUrpX9QjAFeKBSBC2acgYHzBUud6xeiR2VvmiJSdoHqk");
 pub mod pda_airdrop {
     use super::*;
 
-    pub fn create_queue(ctx: Context<CreateQueue>) -> Result<()> {
-        let queue = &mut ctx.accounts.queue;
-        queue.size = 0;
-        Ok(())
-    }
-
     pub fn create_airdop(_ctx: Context<CreateAirdrop>) -> Result<()> {
-        // let airdrop = &mut ctx.accounts.airdrop;
-        // airdrop.bump = *ctx.bumps.get("airdrop").unwrap();
-        // airdrop.mint = ctx.accounts.mint.key();
         Ok(())
     }
 
-    pub fn execute_airdrop(_ctx: Context<ExecuteAirdrop>, _amount: u64, _airdrop_bump: u8, _mint_bump: u8) -> Result<()> {
+    pub fn execute_airdrop(_ctx: Context<ExecuteAirdrop>, _amount: u64) -> Result<()> {
         Ok(())
     }
     // pub fn execute_airdrop(ctx: Context<ExecuteAirdrop>, amount: u64) -> Result<()> {
@@ -95,7 +86,6 @@ pub struct CreateAirdrop<'info> {
 
 // Instruction: Execute Airdrop
 #[derive(Accounts)]
-#[instruction(amount: u64, airdrop_bump: u8, mint_bump: u8)]
 pub struct ExecuteAirdrop<'info> {
     #[account(mut)]
     pub signer: Signer<'info>,
@@ -105,36 +95,7 @@ pub struct ExecuteAirdrop<'info> {
     pub mint: Account<'info, Mint>,
     #[account(mut)]
     pub ata: Account<'info, TokenAccount>,
-    // pub associated_token_program: Program<'info, AssociatedToken>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,
-    pub system_program: Program<'info, System>,
-}
-
-// Account: Queue
-#[account]
-pub struct Queue {
-    current_game: Pubkey,
-    size: u8,
-    bump: u8,
-}
-
-impl Queue {
-    const LEN: usize = DISCRIMINATOR + PUBLIC_KEY + U8 + U8;
-}
-
-// Instruction: Create Queue
-#[derive(Accounts)]
-pub struct CreateQueue<'info> {
-    #[account(mut)]
-    pub signer: Signer<'info>,
-    #[account(
-        init, 
-        seeds = [b"queue".as_ref()],
-        bump, 
-        payer = signer, 
-        space = Queue::LEN
-    )]
-    pub queue: Account<'info, Queue>,
     pub system_program: Program<'info, System>,
 }
