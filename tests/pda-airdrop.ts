@@ -44,8 +44,8 @@ describe("pda-airdrop", () => {
       })
       .rpc();
 
-    // const mintAccount = await getMint(provider.connection, mint);
+    const mintAccount = await getMint(provider.connection, mint);
 
-    // expect(mintAccount.supply).equal(supply);
+    expect(Number(mintAccount.supply)).equal(supply.toNumber());
   });
 });

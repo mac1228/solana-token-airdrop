@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
-    associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
 
@@ -14,32 +13,29 @@ pub mod pda_airdrop {
         Ok(())
     }
 
-    pub fn execute_airdrop(_ctx: Context<ExecuteAirdrop>, _amount: u64) -> Result<()> {
+    pub fn execute_airdrop(ctx: Context<ExecuteAirdrop>, amount: u64) -> Result<()> {
+        // mint amount to associated token account
+        let token_program = ctx.accounts.token_program.to_account_info();
+        let mint_to_accounts = MintTo {
+            mint: ctx.accounts.mint.to_account_info(),
+            to: ctx.accounts.ata.to_account_info(),
+            authority: ctx.accounts.airdrop.to_account_info(),
+        };
+        let bump = *ctx.bumps.get("airdrop").unwrap();
+        mint_to(
+            CpiContext::new_with_signer(
+                token_program, 
+                mint_to_accounts, 
+                &[&[
+                    b"airdrop",
+                    &[bump]
+                ]]
+            ), 
+            amount
+        )?;
+
         Ok(())
     }
-    // pub fn execute_airdrop(ctx: Context<ExecuteAirdrop>, amount: u64) -> Result<()> {
-    //     // mint amount to associated token account
-    //     let token_program = ctx.accounts.token_program.to_account_info();
-    //     let mint_to_accounts = MintTo {
-    //         mint: ctx.accounts.mint.to_account_info(),
-    //         to: ctx.accounts.ata.to_account_info(),
-    //         authority: ctx.accounts.mint.to_account_info(),
-    //     };
-    //     let bump = *ctx.bumps.get("mint").unwrap();
-    //     mint_to(
-    //         CpiContext::new_with_signer(
-    //             token_program, 
-    //             mint_to_accounts, 
-    //             &[&[
-    //                 b"mint",
-    //                 &[bump]
-    //             ]]
-    //         ), 
-    //         amount
-    //     )?;
-
-    //     Ok(())
-    // }
 }
 
 const DISCRIMINATOR: usize = 8;
