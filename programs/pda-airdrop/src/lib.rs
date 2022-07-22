@@ -103,7 +103,7 @@ pub struct ExecuteAirdrop<'info> {
     pub airdrop: Account<'info, Airdrop>,
     #[account(mut, seeds = [b"mint".as_ref()], bump)]
     pub mint: Account<'info, Mint>,
-    #[account(init_if_needed, payer = signer, token::mint = mint, token::authority = signer)]
+    #[account(mut)]
     pub ata: Account<'info, TokenAccount>,
     // pub associated_token_program: Program<'info, AssociatedToken>,
     pub token_program: Program<'info, Token>,

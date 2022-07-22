@@ -5,6 +5,7 @@ import { expect } from "chai";
 import {
   getMint,
   getAssociatedTokenAddress,
+  createAssociatedTokenAccount,
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
@@ -82,12 +83,21 @@ describe("pda-airdrop", () => {
       program.programId
     );
 
-    // const ata = await getAssociatedTokenAddress(
-    //   mint,
-    //   provider.wallet.publicKey
-    // );
+    const blah = await getAssociatedTokenAddress(
+      mint,
+      provider.wallet.publicKey
+    );
+    console.log(blah);
 
-    const ata = web3.Keypair.generate();
+    // const ata = web3.Keypair.generate();
+
+    const ata = await createAssociatedTokenAccount(
+      provider.connection,
+      signer.payer,
+      mint,
+      signer.publicKey
+    );
+    console.log(ata);
 
     const supply = new anchor.BN(200);
     await program.methods
@@ -96,13 +106,13 @@ describe("pda-airdrop", () => {
         // signer: provider.wallet.publicKey,
         // airdrop,
         // mint,
-        ata: ata.publicKey,
+        ata: ata,
         // associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         // tokenProgram: TOKEN_PROGRAM_ID,
         // rent: anchor.web3.SYSVAR_RENT_PUBKEY,
         // systemProgram: web3.SystemProgram.programId,
       })
-      .signers([ata])
+      // .signers([ata])
       .rpc();
 
     // const mintAccount = await getMint(provider.connection, mint);
