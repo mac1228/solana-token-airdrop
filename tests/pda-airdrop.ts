@@ -18,7 +18,7 @@ describe("pda-airdrop", () => {
   // Read this https://github.com/coral-xyz/anchor/blob/e606e5a0724bc6ac52b20ca63d8a2a912aca22bd/docs/src/pages/docs/pdas.md
 
   it("can create airdrop account", async () => {
-    // const mint = web3.Keypair.generate().publicKey;
+    const mint = web3.Keypair.generate();
 
     const [airdrop, bump] = await anchor.web3.PublicKey.findProgramAddress(
       [Buffer.from("airdrop")],
@@ -30,12 +30,12 @@ describe("pda-airdrop", () => {
       .accounts({
         // signer: signer.publicKey,
         airdrop,
-        // mint,
+        mint: mint.publicKey,
         // tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
         // rent: anchor.web3.SYSVAR_RENT_PUBKEY,
         // systemProgram: anchor.web3.SystemProgram.programId,
       })
-      // .signers([signer.payer])
+      .signers([mint])
       .rpc();
 
     // const [airdrop] = await web3.PublicKey.findProgramAddress(
