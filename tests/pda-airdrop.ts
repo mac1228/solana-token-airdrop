@@ -56,7 +56,12 @@ describe("pda-airdrop", () => {
       program.programId
     );
 
-    await program.methods.createQueue().rpc();
+    await program.methods
+      .createQueue()
+      .accounts({
+        queue,
+      })
+      .rpc();
 
     const fetchedQueue = await program.account.queue.fetch(queue);
 

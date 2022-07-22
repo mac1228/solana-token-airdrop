@@ -1,5 +1,5 @@
 [features]
-seeds = true
+seeds = false
 skip-lint = false
 [programs.localnet]
 pda_airdrop = "AUrpX9QjAFeKBSBC2acgYHzBUud6xeiR2VvmiJSdoHqk"
