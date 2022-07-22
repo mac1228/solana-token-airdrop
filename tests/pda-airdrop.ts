@@ -10,8 +10,8 @@ describe("pda-airdrop", () => {
   anchor.setProvider(provider);
   const signer = provider.wallet as anchor.Wallet;
 
-  it("can create airdrop account", async () => {
-    await program.methods.createAirdop().rpc();
+  it("can create mint account for airdrop", async () => {
+    await program.methods.createAirdropMint().rpc();
 
     const [mint] = await web3.PublicKey.findProgramAddress(
       [Buffer.from("mint")],
@@ -23,8 +23,8 @@ describe("pda-airdrop", () => {
     expect(mintAccount.isInitialized).eql(true);
   });
 
-  it("can airdrop token to account", async () => {
-    const [mint, _mintBump] = await web3.PublicKey.findProgramAddress(
+  it("can airdrop token to associated token account", async () => {
+    const [mint] = await web3.PublicKey.findProgramAddress(
       [Buffer.from("mint")],
       program.programId
     );
