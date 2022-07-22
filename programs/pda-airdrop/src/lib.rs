@@ -79,7 +79,7 @@ pub struct CreateAirdrop<'info> {
         init, 
         payer = signer,
         mint::decimals = 0, 
-        mint::authority = signer
+        mint::authority = airdrop
     )]
     pub mint: Account<'info, Mint>,
     pub token_program: Program<'info, Token>,

@@ -20,16 +20,16 @@ describe("pda-airdrop", () => {
   it("can create airdrop account", async () => {
     const mint = web3.Keypair.generate();
 
-    const [airdrop, bump] = await anchor.web3.PublicKey.findProgramAddress(
-      [Buffer.from("airdrop")],
-      program.programId
-    );
+    // const [airdrop, bump] = await anchor.web3.PublicKey.findProgramAddress(
+    //   [Buffer.from("airdrop")],
+    //   program.programId
+    // );
 
     await program.methods
       .createAirdop()
       .accounts({
         // signer: signer.publicKey,
-        airdrop,
+        // airdrop,
         mint: mint.publicKey,
         // tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
         // rent: anchor.web3.SYSVAR_RENT_PUBKEY,
@@ -58,9 +58,9 @@ describe("pda-airdrop", () => {
 
     await program.methods
       .createQueue()
-      .accounts({
-        queue,
-      })
+      // .accounts({
+      //   queue,
+      // })
       .rpc();
 
     const fetchedQueue = await program.account.queue.fetch(queue);
