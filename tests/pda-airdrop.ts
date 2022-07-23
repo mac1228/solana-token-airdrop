@@ -2,7 +2,7 @@ import * as anchor from "@project-serum/anchor";
 import { Program, web3 } from "@project-serum/anchor";
 import { PdaAirdrop } from "../target/types/pda_airdrop";
 import { expect } from "chai";
-import { getMint, createAssociatedTokenAccount } from "@solana/spl-token";
+import { getMint, getAssociatedTokenAddress } from "@solana/spl-token";
 
 describe("pda-airdrop", () => {
   const program = anchor.workspace.PdaAirdrop as Program<PdaAirdrop>;
@@ -28,15 +28,9 @@ describe("pda-airdrop", () => {
       [Buffer.from("mint")],
       program.programId
     );
-
-    const ata = await createAssociatedTokenAccount(
-      provider.connection,
-      signer.payer,
-      mint,
-      signer.publicKey
-    );
-
+    const ata = await getAssociatedTokenAddress(mint, signer.publicKey);
     const supply = new anchor.BN(200);
+
     await program.methods
       .executeAirdrop(supply)
       .accounts({

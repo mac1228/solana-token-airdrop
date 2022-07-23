@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
+    associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
 
@@ -64,9 +65,10 @@ pub struct ExecuteAirdrop<'info> {
     pub signer: Signer<'info>,
     #[account(mut, seeds = [b"mint".as_ref()], bump)]
     pub mint: Account<'info, Mint>,
-    #[account(mut)]
+    #[account(init, payer = signer, associated_token::mint = mint, associated_token::authority = signer)]
     pub ata: Account<'info, TokenAccount>,
     pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
     pub rent: Sysvar<'info, Rent>,
     pub system_program: Program<'info, System>,
 }
